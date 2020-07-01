@@ -33,8 +33,8 @@ from __future__ import print_function
 from astropy.io import fits
 from astropy.time import Time
 import os
-from make_map import make_map
-from map_util import *
+from mapping.make_map import make_map
+from mapping.map_util import *
 
 def vso_search(trange=None, instrument=None, wavelength=None):
     try:
