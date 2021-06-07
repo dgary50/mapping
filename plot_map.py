@@ -80,6 +80,9 @@
 #
 # History     : 2020-May-26  DG
 #                 Ported from Dominic Zarro's IDL code of the same name.
+#             : 2021-Jun-06  DG
+#                 Had to add another set_aspect() call in plot_map to keep window axes equal.
+#                 Also added keep_limb kwarg handling.
 #
 # Contact     : dgary@njit.edu
 #-
@@ -562,7 +565,7 @@ def plot_map(map=None, cont=False, over=False, panel=None,
     no_drotate = not drotate
     no_project = no_drotate
 
-    ilimb = False 
+    ilimb = False
     olimb = False
     no_roll_correct = rolling or last['roll_correct']
 
@@ -571,14 +574,16 @@ def plot_map(map=None, cont=False, over=False, panel=None,
     if cont:
         if over:
             trans = [0,0]
-            if about_center: 
-                rcenter = last['center'] 
-            else: 
+            if about_center:
+                rcenter = last['center']
+            else:
                 rcenter = last['rcenter']
+            keep_limb = default(kwargs, 'keep_limb', False)
+            print('keep_limb:', keep_limb)
             xp, yp = drot_map(map, time=last['time'], trans=trans, b0=last['b0'], l0=last['l0'],
                            rsun=last['rsun'], roll=last['roll'], rcenter=rcenter,
-                           no_data = True, no_drotate=no_drotate, 
-                           no_project=no_project, no_roll_correct=no_roll_correct, 
+                           no_data = True, no_drotate=no_drotate, keep_limb=keep_limb,
+                           no_project=no_project, no_roll_correct=no_roll_correct,
                            about_center=about_center)
 
 #            ranges = get_map_sub_ranges(map, xrange=dxrange, yrange=dyrange, xcor=None, ycor=None)
@@ -666,6 +671,7 @@ def plot_map(map=None, cont=False, over=False, panel=None,
 
     #-- make an empty plot to establish scaling
 
+#    import pdb; pdb.set_trace()
     axis.set_xlim(xmin, xmax)
     axis.set_ylim(ymin, ymax)
     axis.set_aspect('equal','box')
@@ -780,6 +786,7 @@ def plot_map(map=None, cont=False, over=False, panel=None,
         if valid_map(saved_map):
             map = saved_map
 
+    axis.set_aspect('equal','box')  # Repeat this call, because somehow it is getting overridden
     # Write any changed information for the next call.
     fp = open(common_file,"wb")
     pickle.dump(last,fp)
