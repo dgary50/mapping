@@ -25,6 +25,8 @@
 #               2020-Jun-07  DG
 #                 Added check for file in url_copy(), and skips download
 #                 if it exists.
+#               2021-Jun-09  Jiajia Liu
+#                 Added two new parameters sample and provider to vso_search()
 #
 # Contact     : dgary@njit.edu
 #-
@@ -36,7 +38,8 @@ import os
 from make_map import make_map
 from map_util import *
 
-def vso_search(trange=None, instrument=None, wavelength=None):
+def vso_search(trange=None, instrument=None, wavelength=None, sample=None,
+               provider=None, source=None):
     try:
         from sunpy.net import Fido, attrs as a
     except:
@@ -53,13 +56,24 @@ def vso_search(trange=None, instrument=None, wavelength=None):
         print('VSO_SEARCH: Error, invalid time range')
         return None
     inst = a.Instrument(instrument)
+    paras = [times, inst]
     if wavelength:
         wave = a.Wavelength(wavelength*u.angstrom)
-        qr = Fido.search(times, inst, wave)
-    else:
-        qr = Fido.search(times, inst)
+        paras = paras + [wave]
+    if sample is not None:
+        sample = a.Sample(sample * u.second) # in units of seconds
+        paras = paras + [sample]
+    if provider is not None:
+        provider = a.Provider(provider)
+        paras = paras + [provider]
+    if source is not None:
+        source = a.Source(source)
+        paras = paras + [source]
+
+    qr = Fido.search(*paras)
+
     return qr
-    
+
 def vso_get(qr, outpath=None, names_only=True):
     if outpath is None:
         outpath = './'
@@ -72,7 +86,7 @@ def vso_get(qr, outpath=None, names_only=True):
     if names_only:
         return files.data
     return files
-    
+
 def is_url(url, scheme=False):
 
     try:
@@ -86,13 +100,13 @@ def is_url(url, scheme=False):
     if res.netloc == '':
         return False
     return True
-    
+
 def get_aia_daily(time=None, wave=None, out_path='./', map=True, **kwargs):
-    
+
     import os
-    
+
     wave_list = ['1600', '1700', '4500', '94', '131', '171', '193', '211', '304', '335', 'blos']
-    
+
     if time is None:
         time = Time.now()
     try:
@@ -166,7 +180,7 @@ def fits2map(file=None, ext=0, header=False, **kwargs):
             replace = kwargs['replace']
         outfile = url_copy(file, replace=replace)
         if outfile:
-            file = outfile        
+            file = outfile
     if not os.path.exists(file):
         print('FITS2MAP Error: File not found',file)
         return None
@@ -219,9 +233,9 @@ def fits2map(file=None, ext=0, header=False, **kwargs):
             frequency = frequency/1e9
             funit = 'GHz'
         id += ' %5.2f ' % frequency + funit
-        
 
-    
+
+
     map = make_map(data, xcen=xc, ycen=yc, dx=dx, dy=dy, time=time,
              sub=sub, roll_angle=roll_angle, id=id, data_units=data_units,
              roll_center=None, fov=fov, xunits=xunits, extra=None,
