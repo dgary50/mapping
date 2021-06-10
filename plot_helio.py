@@ -40,8 +40,8 @@
 from __future__ import print_function
 from astropy.time import Time
 import numpy as np
-from map_util import *
-from transform_solar import hel2arcmin
+from mapping.map_util import *
+from mapping.transform_solar import hel2arcmin
 dtor = np.pi/180.0   # Global conversion of degrees to radians
 
 def plot_helio(date=None, roll=False, rcenter=[0.,0.], 

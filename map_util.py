@@ -11,7 +11,7 @@
 from __future__ import print_function
 from copy import deepcopy
 import numpy as np
-import transform_solar as solar
+import mapping.transform_solar as solar
 dtor = np.pi/180.0   # Global conversion of degrees to radians
 
 def default(src, kw, default, pop=True):

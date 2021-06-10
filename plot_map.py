@@ -90,9 +90,9 @@
 from __future__ import print_function
 import matplotlib.pylab as plt
 import numpy as np
-from map_util import *
-from transform_map import rot_map, shift_map, drot_map
-from transform_solar import pb0r
+from mapping.map_util import *
+from mapping.transform_map import rot_map, shift_map, drot_map
+from mapping.transform_solar import pb0r
 
 def last_wp():
     import pickle
@@ -249,7 +249,7 @@ def plot_map(map=None, cont=False, over=False, panel=None,
     #-- overlay limb and/or grid on previous plot
 
     if over and map is None:
-        from plot_helio import plot_helio
+        from mapping.plot_helio import plot_helio
         if last['time'] is None:
             print('PLOT_MAP: Error: No previous image on which to overlay limb/grid')
             return False
@@ -739,7 +739,7 @@ def plot_map(map=None, cont=False, over=False, panel=None,
     #-- overlay a solar latitude-longitude grid
 
     if (grid != 0. or limb):
-        from plot_helio import plot_helio
+        from mapping.plot_helio import plot_helio
         if shifting:
             rcenter = saved_rcenter 
         else: 
