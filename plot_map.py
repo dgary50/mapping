@@ -579,7 +579,6 @@ def plot_map(map=None, cont=False, over=False, panel=None,
             else:
                 rcenter = last['rcenter']
             keep_limb = default(kwargs, 'keep_limb', False)
-            print('keep_limb:', keep_limb)
             xp, yp = drot_map(map, time=last['time'], trans=trans, b0=last['b0'], l0=last['l0'],
                            rsun=last['rsun'], roll=last['roll'], rcenter=rcenter,
                            no_data = True, no_drotate=no_drotate, keep_limb=keep_limb,
