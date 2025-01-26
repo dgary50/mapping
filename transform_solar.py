@@ -112,10 +112,10 @@ def pb0r(date=None, soho=False, arcsec=False, stereo=False, roll_angle=0.):
 
     if date:
         try:
-            date.replace('/','-')
-            time = Time(date)
+            date_ = date.replace('/','-')
+            time = Time(date_)
         except ValueError:
-            print('PB0R: Error, could not interpret given date as ISO time.')
+            print('PB0R: Error, could not interpret given date',date_,'as ISO time.')
             return defret
     else:
         time = Time.now()

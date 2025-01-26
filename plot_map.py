@@ -247,7 +247,7 @@ def plot_map(map=None, cont=False, over=False, panel=None,
     lthick = default(kwargs, 'lthick', 1)
     
     #-- overlay limb and/or grid on previous plot
-
+#    import pdb; pdb.set_trace()
     if over and map is None:
         from mapping.plot_helio import plot_helio
         if last['time'] is None:
@@ -321,11 +321,11 @@ def plot_map(map=None, cont=False, over=False, panel=None,
         fig = plt.figure(window)
         axes = fig.get_axes()
         # Remove any axes from list that are not "Subplot" axes
-        good_axes = []
-        for ax in axes:
-            if str(ax).find('Subplot') != -1:
-                good_axes.append(ax)
-        axes = good_axes
+        #good_axes = []
+        #for ax in axes:
+        #    if str(ax).find('Subplot') != -1:
+        #        good_axes.append(ax)
+        #axes = good_axes
         # See if the current axis is in the window
         naxes = len(axes)
         if panel <= naxes:
@@ -391,7 +391,7 @@ def plot_map(map=None, cont=False, over=False, panel=None,
 
     off_scale = odmax*100.
     if map['data'].dtype == np.byte:
-        pic = np.float(map['data'])
+        pic = float(map['data'])
     else:
         pic = deepcopy(map['data'])
     inan = np.where(np.isnan(pic))
@@ -416,7 +416,7 @@ def plot_map(map=None, cont=False, over=False, panel=None,
     if log:
         pmin = np.nanmin(pic[ok])
         pmax = np.nanmax(pic[ok])
-        odrange = [np.float(pmin),np.float(pmax)]
+        odrange = [float(pmin),float(pmax)]
 
     #-- establish plot labels
 
@@ -615,7 +615,7 @@ def plot_map(map=None, cont=False, over=False, panel=None,
         if valid_map(drange):
             prange = [np.nanmin(drange['data']),np.nanmax(drange['data'])]
         else:
-            prange = np.float(drange)
+            prange = float(drange)
 
     prange.sort()
     if min(prange) == max(prange): 

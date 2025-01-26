@@ -105,7 +105,7 @@ def dscale(array=None, min=None, max=None, missing=None, log=False, err='',
     if drange:
         try:
             cmin, cmax = drange
-            temp = np.array([cmin,cmax]).astype(np.float)
+            temp = np.array([cmin,cmax]).astype(np.float64)
             temp.sort()
             cmin, cmax = temp
         except:
@@ -234,8 +234,9 @@ def make_map(data, xcen=0.0, ycen=0.0, dx=1.0, dy=1.0, time=None,
         t = Time(time)
         stime = t.iso
     except ValueError:
-        # Error interpreting time, so set to current time.
-        stime = Time.now().iso
+        # Error interpreting time, so interpret it as a string.
+        stime = time
+        print("Time is of non-standard format:",time,"Consider editing map['time'] to correct it.")
 
     nx = sz[0]; ny = sz[1]
     dx = np.float64(dx); dy = np.float64(dy)
